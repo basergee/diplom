@@ -1,0 +1,45 @@
+{% extends 'main.html' %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="btn-group">
+                  <a href="{% url 'info' %}" class="btn btn-primary" aria-current="page">Общая информация</a>
+                  <a href="{% url 'maintenance' %}" class="btn btn-primary active">ТО</a>
+                  <a href="{% url 'reclamation' %}" class="btn btn-primary">Рекламации</a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Вид ТО</th>
+                            <th scope="col">Дата проведения ТО</th>
+                            <th scope="col">Наработка, м/час</th>
+                            <th scope="col">№ заказ-наряда</th>
+                            <th scope="col">Дата заказ-наряда</th>
+                            <th scope="col">Зав. № машины</th>
+                            <th scope="col">Сервисная компания</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for v in maintenance_list %}
+                    <tr>
+                        <td><a href="{% url 'handbook_detail' v.maintenance_type.pk %}"/>{{v.maintenance_type}}</td>
+                        <td>{{v.maintenance_date}}</td>
+                        <td>{{v.operating_time}}</td>
+                        <td>{{v.work_order_id}}</td>
+                        <td>{{v.work_order_date}}</td>
+                        <td>{{v.vehicle}}</td>
+                        <td><a href="{% url 'handbook_detail' v.service_company.pk %}"/>{{v.service_company}}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
