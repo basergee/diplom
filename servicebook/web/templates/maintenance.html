@@ -2,6 +2,7 @@
 
 {% block content %}
     <div class="container">
+        <!-- Кнопки навигации -->
         <div class="row">
             <div class="col">
                 <div class="btn-group">
@@ -11,6 +12,33 @@
                 </div>
             </div>
         </div>
+
+        <!-- Форма для фильтрации данных -->
+        <div class="row">
+            <div class="col">
+                <form method="GET" action=".">
+                    <div class="form-row">
+                        <div class="input-group">
+                            <input type="search" name="mtype" placeholder="Вид ТО"/>
+                            <span class="input-group-append">
+                                <div class="input-group-text bg-transparent">
+                                    <i class="fa fa-search"></i>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <input type="search" name="vehicle" placeholder="Зав № машины"/>
+                    </div>
+                    <div class="form-row">
+                        <input type="search" name="service" placeholder="Сервисная компания"/>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Таблица с данными -->
         <div class="row">
             <div class="table-responsive">
                 <table class="table table-striped">
