@@ -1,0 +1,99 @@
+{% extends 'main.html' %}
+
+{% block content %}
+    <div class="container">
+        <!-- Кнопки навигации -->
+        <div class="row">
+            <div class="col">
+                <div class="btn-group">
+                  <a href="{% url 'info' %}" class="btn btn-primary active" aria-current="page">Общая информация</a>
+                  <a href="{% url 'maintenance' %}" class="btn btn-primary">ТО</a>
+                  <a href="{% url 'reclamation' %}" class="btn btn-primary">Рекламации</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Форма для фильтрации данных -->
+        <div class="row">
+            <div class="col">
+                <form method="GET" action=".">
+                    <div class="form-row">
+                        <div class="input-group">
+                            <input type="search" name="vehicle" placeholder="модель техники"/>
+                            <span class="input-group-append">
+                                <div class="input-group-text bg-transparent">
+                                    <i class="fa fa-search"></i>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <input type="search" name="engine" placeholder="модель двигателя"/>
+                    </div>
+                    <div class="form-row">
+                        <input type="search" name="transmission" placeholder="модель трансмиссии"/>
+                    </div>
+                    <div class="form-row">
+                        <input type="search" name="mainaxle" placeholder="модель ведущего моста"/>
+                    </div>
+                    <div class="form-row">
+                        <input type="search" name="drivenaxle" placeholder="модель управляемого моста"/>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Таблица с данными -->
+        <div class="row">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Зав. № машины</th>
+                            <th scope="col">Модель техники</th>
+                            <th scope="col">Модель двигателя</th>
+                            <th scope="col">Зав. № двигателя</th>
+                            <th scope="col">Модель трансмиссии</th>
+                            <th scope="col">Зав. № трансмиссии</th>
+                            <th scope="col">Модель ведущего моста</th>
+                            <th scope="col">Зав. № ведущего моста</th>
+                            <th scope="col">Модель управляемого моста</th>
+                            <th scope="col">Зав. № управляемого моста</th>
+                            <th scope="col">Договор поставки №, дата</th>
+                            <th scope="col">Дата отгрузки с завода</th>
+                            <th scope="col">Грузополучатель (конечный потребитель)</th>
+                            <th scope="col">Адрес поставки (эксплуатации)</th>
+                            <th scope="col">Комплектация (доп. опции)</th>
+                            <th scope="col">Клиент</th>
+                            <th scope="col">Сервисная компания</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for v in vehicle_list %}
+                    <tr>
+                        <td>{{v.vehicle_id}}</td>
+                        <td><a href="{% url 'handbook_detail' v.vehicle_model.pk %}"/>{{v.vehicle_model}}</td>
+                        <td><a href="{% url 'handbook_detail' v.engine_model.pk %}"/>{{v.engine_model}}</td>
+                        <td>{{v.engine_id}}</td>
+                        <td><a href="{% url 'handbook_detail' v.transmission_model.pk %}"/>{{v.transmission_model}}</td>
+                        <td>{{v.transmission_id}}</td>
+                        <td><a href="{% url 'handbook_detail' v.main_axle_model.pk %}"/>{{v.main_axle_model}}</td>
+                        <td>{{v.main_axle_id}}</td>
+                        <td><a href="{% url 'handbook_detail' v.driven_axle_model.pk %}"/>{{v.driven_axle_model}}</td>
+                        <td>{{v.driven_axle_id}}</td>
+                        <td>{{v.contract_id_date}}</td>
+                        <td>{{v.shipping_date}}</td>
+                        <td>{{v.consignee}}</td>
+                        <td>{{v.shipping_address}}</td>
+                        <td>{{v.equipment}}</td>
+                        <td>{{v.client}}</td>
+                        <td><a href="{% url 'handbook_detail' v.service_company.pk %}"/>{{v.service_company}}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

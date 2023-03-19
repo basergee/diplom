@@ -1,0 +1,79 @@
+{% extends 'main.html' %}
+
+{% block content %}
+    <div class="container">
+        <!-- Кнопки навигации -->
+        <div class="row">
+            <div class="col">
+                <div class="btn-group">
+                  <a href="{% url 'info' %}" class="btn btn-primary" aria-current="page">Общая информация</a>
+                  <a href="{% url 'maintenance' %}" class="btn btn-primary">ТО</a>
+                  <a href="{% url 'reclamation' %}" class="btn btn-primary active">Рекламации</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Форма для фильтрации данных -->
+        <div class="row">
+            <div class="col">
+                <form method="GET" action=".">
+                    <div class="form-row">
+                        <div class="input-group">
+                            <input type="search" name="fnode" placeholder="Узел отказа"/>
+                            <span class="input-group-append">
+                                <div class="input-group-text bg-transparent">
+                                    <i class="fa fa-search"></i>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <input type="search" name="repairdescription" placeholder="Способ восстановления"/>
+                    </div>
+                    <div class="form-row">
+                        <input type="search" name="service" placeholder="Сервисная компания"/>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Таблица с данными -->
+        <div class="row">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Дата отказа</th>
+                            <th scope="col">Наработка, м/час</th>
+                            <th scope="col">Узел отказа</th>
+                            <th scope="col">Описание отказа</th>
+                            <th scope="col">Способ восстановления</th>
+                            <th scope="col">Используемые запасные части</th>
+                            <th scope="col">Дата восстановления</th>
+                            <th scope="col">Время простоя техники</th>
+                            <th scope="col">Зав. № машины</th>
+                            <th scope="col">Сервисная компания</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for v in reclamation_list %}
+                    <tr>
+                        <td>{{v.failure_date}}</td>
+                        <td>{{v.operating_time}}</td>
+                        <td><a href="{% url 'handbook_detail' v.failure_node.pk %}"/>{{v.failure_node}}</td>
+                        <td>{{v.failure_description}}</td>
+                        <td><a href="{% url 'handbook_detail' v.repair_description.pk %}"/>{{v.repair_description}}</td>
+                        <td>{{v.spare_parts}}</td>
+                        <td>{{v.repair_date}}</td>
+                        <td>{{v.downtime}}</td>
+                        <td>{{v.vehicle}}</td>
+                        <td><a href="{% url 'handbook_detail' v.service_company.pk %}"/>{{v.service_company}}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
