@@ -5,7 +5,12 @@
         <!-- Приветствие -->
         <div class="div row">
             <div class="div col">
-                <p>{{ user.first_name }}</p>
+                {% if user.is_authenticated %}
+                    <p>{{ user.first_name }}</p>
+                    <a href="{% url 'logout' %}">Выйти</a>
+                {% else %}
+                    <a href="{% url 'login' %}">Войдите</a>
+                {% endif %}
             </div>
         </div>
         <div class="row">

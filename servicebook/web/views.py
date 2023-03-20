@@ -1,8 +1,34 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView
 from django.db.models import Q
+from django.contrib.auth import login, logout, authenticate
 
 from api.models import Vehicle, Handbook, Maintenance, Reclamation
+from .forms import UserLoginForm
+
+
+def login_view(request):
+    next = request.GET.get('next')
+    form = UserLoginForm(request.POST or None)
+
+    if form.is_valid():
+        username = form.cleaned_data.get('username')
+        password = form.cleaned_data.get('password')
+        user = authenticate(username=username, password=password)
+        login(request, user)
+        if next:
+            return redirect(next)
+        return redirect('info')
+
+    context = {
+        'form': form
+    }
+    return render(request, 'login.html', context)
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('info')
 
 
 class GeneralInfoView(ListView):
