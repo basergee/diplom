@@ -28,7 +28,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('info')
+    return redirect('index')
 
 
 class IndexView(ListView):
