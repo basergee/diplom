@@ -87,8 +87,8 @@
                         <td>{{v.consignee}}</td>
                         <td>{{v.shipping_address}}</td>
                         <td>{{v.equipment}}</td>
-                        <td>{{v.client}}</td>
-                        <td><a href="{% url 'handbook_detail' v.service_company.pk %}"/>{{v.service_company}}</td>
+                        <td>{{v.client.first_name}}</td>
+                        <td>{{v.service_company.first_name}}</td>
                     </tr>
                     {% endfor %}
                     </tbody>
