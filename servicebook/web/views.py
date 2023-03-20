@@ -31,6 +31,26 @@ def logout_view(request):
     return redirect('info')
 
 
+class IndexView(ListView):
+    template_name = 'index.html'
+    context_object_name = 'search_results'
+    model = Vehicle
+
+    def get(self, request, *args, **kwargs):
+        vehicle_id = request.GET.get('vehicleid')
+
+        if vehicle_id != '' and vehicle_id is not None:
+            qs = Vehicle.objects.filter(vehicle_id__icontains=vehicle_id)
+        else:
+            # Если запросов нет, ничего не выводим
+            qs = []
+
+        context = {
+            self.context_object_name: qs
+        }
+        return render(request, self.template_name, context)
+
+
 class GeneralInfoView(ListView):
     template_name = 'general-info.html'
     model = Vehicle
