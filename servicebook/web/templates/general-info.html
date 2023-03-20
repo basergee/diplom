@@ -4,13 +4,8 @@
     <div class="container">
         <!-- Приветствие -->
         <div class="div row">
-            <div class="div col">
-                {% if user.is_authenticated %}
-                    <p>{{ user.first_name }}</p>
-                    <a href="{% url 'logout' %}">Выйти</a>
-                {% else %}
-                    <a href="{% url 'login' %}">Войдите</a>
-                {% endif %}
+            <div class="div col text-center">
+                <p class="fs-3">{{ user.first_name }}</p>
             </div>
         </div>
         <div class="row">
