@@ -60,12 +60,12 @@ class GeneralInfoView(ListView):
     # Сортировка по полю 'Дата отгрузки с завода'
     ordering = '-shipping_date'
 
-    def get(self, request, *args, **kwargs):
-        vm = request.GET.get('vehicle')
-        em = request.GET.get('engine')
-        tm = request.GET.get('transmission')
-        mam = request.GET.get('mainaxle')
-        dam = request.GET.get('drivenaxle')
+    def get_queryset(self):
+        vm = self.request.GET.get('vehicle')
+        em = self.request.GET.get('engine')
+        tm = self.request.GET.get('transmission')
+        mam = self.request.GET.get('mainaxle')
+        dam = self.request.GET.get('drivenaxle')
 
         # Из полученных параметров подготавливаем объекты запросов
         res = []
@@ -80,10 +80,23 @@ class GeneralInfoView(ListView):
         if dam != '' and dam is not None:
             res.append(Q(driven_axle_model__title__icontains=dam))
 
-        if not res:
-            # Если запросов нет, выводим все объекты
+        qs = None  # Объекты, которые будут выведены на страницу
+
+        if self.request.user.groups.filter(name='Client').exists():
+            # Клиент видит только свои машины
+            qs = Vehicle.objects.filter(client=self.request.user)
+        elif self.request.user.groups.filter(name='ServiceCompany').exists():
+            # Сервисная компания видит только машины, которые обслуживает
+            qs = Vehicle.objects.filter(service_company=self.request.user)
+        elif self.request.user.groups.filter(name='Manager').exists():
+            # Менеджер видит все машины
             qs = Vehicle.objects.all()
         else:
+            # Пользователь не состоит в группе. Это ошибка!
+            # Стоит как-то уведомить об этом: может кинуть исключение
+            qs = Vehicle.objects.none()
+
+        if res:
             # Объединяем все запросы в один и фильтруем сразу по всем
             # переданным параметрам
             q = res[0]
@@ -92,10 +105,7 @@ class GeneralInfoView(ListView):
 
             qs = Vehicle.objects.filter(q)
 
-        context = {
-            self.context_object_name: qs
-        }
-        return render(request, self.template_name, context)
+        return qs
 
 
 class VehicleCreateView(CreateView):
