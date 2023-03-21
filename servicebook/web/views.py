@@ -53,8 +53,8 @@ class IndexView(ListView):
         return render(request, self.template_name, context)
 
 
-class GeneralInfoView(LoginRequiredMixin, ListView):
-    template_name = 'general-info.html'
+class VehiclesView(LoginRequiredMixin, ListView):
+    template_name = 'vehicle.html'
     model = Vehicle
     context_object_name = 'vehicle_list'
 
