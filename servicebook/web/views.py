@@ -2,11 +2,11 @@ from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.db.models import Q
 from django.contrib.auth import login, logout, authenticate
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 
 from api.models import Vehicle, Handbook, Maintenance, Reclamation
-from .forms import UserLoginForm
+from .forms import UserLoginForm, MaintenanceCreateForm
 
 
 def login_view(request):
@@ -218,19 +218,36 @@ class MaintenanceView(LoginRequiredMixin, ListView):
         return qs
 
 
-class MaintenanceCreateView(LoginRequiredMixin, CreateView):
+class MaintenanceCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     template_name = 'add_or_edit_object_form.html'
     model = Maintenance
-    fields = [
-        'vehicle',
-        'maintenance_type',
-        'maintenance_date',
-        'operating_time',
-        'work_order_id',
-        'work_order_date',
-        'service_company',
-    ]
+    # fields = [
+    #     'vehicle',
+    #     'maintenance_type',
+    #     'maintenance_date',
+    #     'operating_time',
+    #     'work_order_id',
+    #     'work_order_date',
+    #     'service_company',
+    # ]
     login_url = reverse_lazy('login')
+    form_class = MaintenanceCreateForm
+    success_url = reverse_lazy('maintenance')
+
+    def get_form_kwargs(self):
+        kwargs = super(MaintenanceCreateView, self).get_form_kwargs()
+        # Добавляем текущего пользователя к форме, чтобы можно было
+        # отфильтровать поля в форме
+        kwargs.update({'user': self.request.user})
+        return kwargs
+
+    def test_func(self):
+        print('----->')
+        return any([
+            self.request.user.groups.filter(name='Client').exists(),
+            self.request.user.groups.filter(name='Service').exists(),
+            self.request.user.groups.filter(name='Manager').exists()
+        ])
 
 
 class MaintenanceUpdateView(LoginRequiredMixin, UpdateView):
