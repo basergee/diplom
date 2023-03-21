@@ -220,7 +220,7 @@ class MaintenanceView(LoginRequiredMixin, ListView):
 
 class MaintenanceCreateView(LoginRequiredMixin, CreateView):
     template_name = 'add_or_edit_object_form.html'
-    model = Reclamation
+    model = Maintenance
     fields = [
         'vehicle',
         'maintenance_type',
@@ -235,7 +235,7 @@ class MaintenanceCreateView(LoginRequiredMixin, CreateView):
 
 class MaintenanceUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'add_or_edit_object_form.html'
-    model = Reclamation
+    model = Maintenance
     fields = [
         'vehicle',
         'maintenance_type',
