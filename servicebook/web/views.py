@@ -163,13 +163,13 @@ class MaintenanceView(ListView):
     # Сортировка по полю 'Дата проведения ТО'
     ordering = '-maintenance_date'
 
-    def get(self, request, *args, **kwargs):
+    def get_queryset(self):
         # вид ТО
-        mt = request.GET.get('mtype')
+        mt = self.request.GET.get('mtype')
         # зав.номер машины
-        vid = request.GET.get('vehicle')
+        vid = self.request.GET.get('vehicle')
         # сервисная компания
-        sc = request.GET.get('service')
+        sc = self.request.GET.get('service')
 
         # Из полученных параметров подготавливаем объекты запросов
         res = []
@@ -180,10 +180,23 @@ class MaintenanceView(ListView):
         if sc != '' and sc is not None:
             res.append(Q(service_company__title__icontains=sc))
 
-        if not res:
-            # Если запросов нет, выводим все объекты
+        qs = None  # Объекты, которые будут выведены на страницу
+
+        if self.request.user.groups.filter(name='Client').exists():
+            # Клиент видит только свои машины
+            qs = Maintenance.objects.filter(vehicle__client=self.request.user)
+        elif self.request.user.groups.filter(name='ServiceCompany').exists():
+            # Сервисная компания видит только машины, которые обслуживает
+            qs = Maintenance.objects.filter(vehicle__service_company=self.request.user)
+        elif self.request.user.groups.filter(name='Manager').exists():
+            # Менеджер видит все машины
             qs = Maintenance.objects.all()
         else:
+            # Пользователь не состоит в группе. Это ошибка!
+            # Стоит как-то уведомить об этом: может кинуть исключение
+            qs = Maintenance.objects.none()
+
+        if res:
             # Объединяем все запросы в один и фильтруем сразу по всем
             # переданным параметрам
             q = res[0]
@@ -192,10 +205,7 @@ class MaintenanceView(ListView):
 
             qs = Maintenance.objects.filter(q)
 
-        context = {
-            self.context_object_name: qs
-        }
-        return render(request, self.template_name, context)
+        return qs
 
 
 class MaintenanceCreateView(CreateView):
@@ -235,13 +245,13 @@ class ReclamationView(ListView):
     # Сортировка по полю 'Дата отказа'
     ordering = '-failure_date'
 
-    def get(self, request, *args, **kwargs):
+    def get_queryset(self):
         # узел отказа
-        fn = request.GET.get('fnode')
+        fn = self.request.GET.get('fnode')
         # способ восстановления
-        rd = request.GET.get('repairdescription')
+        rd = self.request.GET.get('repairdescription')
         # сервисная компания
-        sc = request.GET.get('service')
+        sc = self.request.GET.get('service')
 
         # Из полученных параметров подготавливаем объекты запросов
         res = []
@@ -252,10 +262,24 @@ class ReclamationView(ListView):
         if sc != '' and sc is not None:
             res.append(Q(service_company__title__icontains=sc))
 
-        if not res:
-            # Если запросов нет, выводим все объекты
+        qs = None  # Объекты, которые будут выведены на страницу
+
+        if self.request.user.groups.filter(name='Client').exists():
+            # Клиент видит только свои машины
+            qs = Reclamation.objects.filter(vehicle__client=self.request.user)
+        elif self.request.user.groups.filter(name='ServiceCompany').exists():
+            # Сервисная компания видит только машины, которые обслуживает
+            qs = Reclamation.objects.filter(
+                vehicle__service_company=self.request.user)
+        elif self.request.user.groups.filter(name='Manager').exists():
+            # Менеджер видит все машины
             qs = Reclamation.objects.all()
         else:
+            # Пользователь не состоит в группе. Это ошибка!
+            # Стоит как-то уведомить об этом: может кинуть исключение
+            qs = Reclamation.objects.none()
+
+        if res:
             # Объединяем все запросы в один и фильтруем сразу по всем
             # переданным параметрам
             q = res[0]
@@ -264,10 +288,7 @@ class ReclamationView(ListView):
 
             qs = Reclamation.objects.filter(q)
 
-        context = {
-            self.context_object_name: qs
-        }
-        return render(request, self.template_name, context)
+        return qs
 
 
 class ReclamationCreateView(CreateView):
