@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.db.models import Q
 from django.contrib.auth import login, logout, authenticate
 
@@ -99,6 +99,7 @@ class GeneralInfoView(ListView):
 
 
 class VehicleCreateView(CreateView):
+    template_name = 'add_or_edit_object_form.html'
     model = Vehicle
     fields = [
         'vehicle_model',
@@ -118,7 +119,29 @@ class VehicleCreateView(CreateView):
         'equipment',
         'service_company',
     ]
-    template_name = 'vehicle_add.html'
+
+
+class VehicleUpdateView(UpdateView):
+    template_name = 'add_or_edit_object_form.html'
+    model = Vehicle
+    fields = [
+        'vehicle_model',
+        'vehicle_id',
+        'engine_model',
+        'engine_id',
+        'transmission_model',
+        'transmission_id',
+        'main_axle_model',
+        'main_axle_id',
+        'driven_axle_model',
+        'driven_axle_id',
+        'shipping_date',
+        'client',
+        'consignee',
+        'shipping_address',
+        'equipment',
+        'service_company',
+    ]
 
 
 class MaintenanceView(ListView):
@@ -165,6 +188,34 @@ class MaintenanceView(ListView):
         return render(request, self.template_name, context)
 
 
+class MaintenanceCreateView(CreateView):
+    template_name = 'add_or_edit_object_form.html'
+    model = Reclamation
+    fields = [
+        'vehicle',
+        'maintenance_type',
+        'maintenance_date',
+        'operating_time',
+        'work_order_id',
+        'work_order_date',
+        'service_company',
+    ]
+
+
+class MaintenanceUpdateView(UpdateView):
+    template_name = 'add_or_edit_object_form.html'
+    model = Reclamation
+    fields = [
+        'vehicle',
+        'maintenance_type',
+        'maintenance_date',
+        'operating_time',
+        'work_order_id',
+        'work_order_date',
+        'service_company',
+    ]
+
+
 class ReclamationView(ListView):
     template_name = 'reclamation.html'
     model = Reclamation
@@ -209,6 +260,38 @@ class ReclamationView(ListView):
         return render(request, self.template_name, context)
 
 
+class ReclamationCreateView(CreateView):
+    template_name = 'add_or_edit_object_form.html'
+    model = Reclamation
+    fields = [
+        'vehicle',
+        'failure_date',
+        'operating_time',
+        'failure_node',
+        'failure_description',
+        'repair_description',
+        'spare_parts',
+        'repair_date',
+        'downtime',
+    ]
+
+
+class ReclamationUpdateView(UpdateView):
+    template_name = 'add_or_edit_object_form.html'
+    model = Reclamation
+    fields = [
+        'vehicle',
+        'failure_date',
+        'operating_time',
+        'failure_node',
+        'failure_description',
+        'repair_description',
+        'spare_parts',
+        'repair_date',
+        'downtime',
+    ]
+
+
 class HandbookDetailView(DetailView):
     template_name = 'handbook.html'
     model = Handbook
@@ -218,3 +301,23 @@ class HandbookDetailView(DetailView):
         # context = super().get_context_data(**kwargs)
         # context['now'] = timezone.now()
         # return context
+
+
+class HandbookCreateView(CreateView):
+    template_name = 'add_or_edit_object_form.html'
+    model = Handbook
+    fields = [
+        'handbook_name',
+        'title',
+        'description'
+    ]
+
+
+class HandbookUpdateView(UpdateView):
+    template_name = 'add_or_edit_object_form.html'
+    model = Handbook
+    fields = [
+        'handbook_name',
+        'title',
+        'description'
+    ]

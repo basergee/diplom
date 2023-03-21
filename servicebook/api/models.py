@@ -2,6 +2,7 @@ from datetime import date
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 
 class Handbook(models.Model):
@@ -28,6 +29,9 @@ class Handbook(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('handbook_detail', kwargs={'pk': self.pk})
 
 
 class Vehicle(models.Model):
