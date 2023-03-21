@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.db.models import Q
 from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
 
 from api.models import Vehicle, Handbook, Maintenance, Reclamation
 from .forms import UserLoginForm
@@ -51,10 +53,13 @@ class IndexView(ListView):
         return render(request, self.template_name, context)
 
 
-class GeneralInfoView(ListView):
+class GeneralInfoView(LoginRequiredMixin, ListView):
     template_name = 'general-info.html'
     model = Vehicle
     context_object_name = 'vehicle_list'
+
+    login_url = reverse_lazy('login')
+
     # Ограничиваем количество машин на странице
     paginate_by = 10
     # Сортировка по полю 'Дата отгрузки с завода'
@@ -108,7 +113,7 @@ class GeneralInfoView(ListView):
         return qs
 
 
-class VehicleCreateView(CreateView):
+class VehicleCreateView(LoginRequiredMixin, CreateView):
     template_name = 'add_or_edit_object_form.html'
     model = Vehicle
     fields = [
@@ -129,9 +134,10 @@ class VehicleCreateView(CreateView):
         'equipment',
         'service_company',
     ]
+    login_url = reverse_lazy('login')
 
 
-class VehicleUpdateView(UpdateView):
+class VehicleUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'add_or_edit_object_form.html'
     model = Vehicle
     fields = [
@@ -152,12 +158,16 @@ class VehicleUpdateView(UpdateView):
         'equipment',
         'service_company',
     ]
+    login_url = reverse_lazy('login')
 
 
-class MaintenanceView(ListView):
+class MaintenanceView(LoginRequiredMixin, ListView):
     template_name = 'maintenance.html'
     model = Maintenance
     context_object_name = 'maintenance_list'
+
+    login_url = reverse_lazy('login')
+
     # Ограничиваем количество машин на странице
     paginate_by = 10
     # Сортировка по полю 'Дата проведения ТО'
@@ -208,7 +218,7 @@ class MaintenanceView(ListView):
         return qs
 
 
-class MaintenanceCreateView(CreateView):
+class MaintenanceCreateView(LoginRequiredMixin, CreateView):
     template_name = 'add_or_edit_object_form.html'
     model = Reclamation
     fields = [
@@ -220,9 +230,10 @@ class MaintenanceCreateView(CreateView):
         'work_order_date',
         'service_company',
     ]
+    login_url = reverse_lazy('login')
 
 
-class MaintenanceUpdateView(UpdateView):
+class MaintenanceUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'add_or_edit_object_form.html'
     model = Reclamation
     fields = [
@@ -234,12 +245,16 @@ class MaintenanceUpdateView(UpdateView):
         'work_order_date',
         'service_company',
     ]
+    login_url = reverse_lazy('login')
 
 
-class ReclamationView(ListView):
+class ReclamationView(LoginRequiredMixin, ListView):
     template_name = 'reclamation.html'
     model = Reclamation
     context_object_name = 'reclamation_list'
+
+    login_url = reverse_lazy('login')
+
     # Ограничиваем количество машин на странице
     paginate_by = 10
     # Сортировка по полю 'Дата отказа'
@@ -291,7 +306,7 @@ class ReclamationView(ListView):
         return qs
 
 
-class ReclamationCreateView(CreateView):
+class ReclamationCreateView(LoginRequiredMixin, CreateView):
     template_name = 'add_or_edit_object_form.html'
     model = Reclamation
     fields = [
@@ -305,9 +320,10 @@ class ReclamationCreateView(CreateView):
         'repair_date',
         'downtime',
     ]
+    login_url = reverse_lazy('login')
 
 
-class ReclamationUpdateView(UpdateView):
+class ReclamationUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'add_or_edit_object_form.html'
     model = Reclamation
     fields = [
@@ -321,6 +337,7 @@ class ReclamationUpdateView(UpdateView):
         'repair_date',
         'downtime',
     ]
+    login_url = reverse_lazy('login')
 
 
 class HandbookDetailView(DetailView):
@@ -334,7 +351,7 @@ class HandbookDetailView(DetailView):
         # return context
 
 
-class HandbookCreateView(CreateView):
+class HandbookCreateView(LoginRequiredMixin, CreateView):
     template_name = 'add_or_edit_object_form.html'
     model = Handbook
     fields = [
@@ -342,9 +359,10 @@ class HandbookCreateView(CreateView):
         'title',
         'description'
     ]
+    login_url = reverse_lazy('login')
 
 
-class HandbookUpdateView(UpdateView):
+class HandbookUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'add_or_edit_object_form.html'
     model = Handbook
     fields = [
@@ -352,3 +370,4 @@ class HandbookUpdateView(UpdateView):
         'title',
         'description'
     ]
+    login_url = reverse_lazy('login')
