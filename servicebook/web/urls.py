@@ -1,7 +1,8 @@
 from django.urls import path
 
 from .views import (GeneralInfoView, HandbookDetailView, MaintenanceView,
-                    ReclamationView, login_view, logout_view, IndexView)
+                    ReclamationView, login_view, logout_view, IndexView,
+                    VehicleCreateView)
 
 
 urlpatterns = [
@@ -12,4 +13,5 @@ urlpatterns = [
     path('maintenance/', MaintenanceView.as_view(), name='maintenance'),
     path('reclamation/', ReclamationView.as_view(), name='reclamation'),
     path('hb/<int:pk>/', HandbookDetailView.as_view(), name='handbook_detail'),
+    path('vehicle/add/', VehicleCreateView.as_view(), name='vehicle_create'),
 ]

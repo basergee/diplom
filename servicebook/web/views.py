@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView
 from django.db.models import Q
 from django.contrib.auth import login, logout, authenticate
 
@@ -96,6 +96,29 @@ class GeneralInfoView(ListView):
             self.context_object_name: qs
         }
         return render(request, self.template_name, context)
+
+
+class VehicleCreateView(CreateView):
+    model = Vehicle
+    fields = [
+        'vehicle_model',
+        'vehicle_id',
+        'engine_model',
+        'engine_id',
+        'transmission_model',
+        'transmission_id',
+        'main_axle_model',
+        'main_axle_id',
+        'driven_axle_model',
+        'driven_axle_id',
+        'shipping_date',
+        'client',
+        'consignee',
+        'shipping_address',
+        'equipment',
+        'service_company',
+    ]
+    template_name = 'vehicle_add.html'
 
 
 class MaintenanceView(ListView):
