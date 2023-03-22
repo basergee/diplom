@@ -3,7 +3,9 @@ from django.views.generic import (ListView, DetailView, CreateView, UpdateView,
                                   DeleteView)
 from django.db.models import Q
 from django.contrib.auth import login, logout, authenticate
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import (LoginRequiredMixin,
+                                        UserPassesTestMixin,
+                                        PermissionRequiredMixin)
 from django.urls import reverse_lazy
 
 from api.models import Vehicle, Handbook, Maintenance, Reclamation
@@ -115,12 +117,14 @@ class VehiclesView(LoginRequiredMixin, ListView):
         return qs
 
 
-class VehicleCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+class VehicleCreateView(LoginRequiredMixin, PermissionRequiredMixin,
+                        UserPassesTestMixin, CreateView):
     template_name = 'add_or_edit_object_form.html'
     model = Vehicle
     login_url = reverse_lazy('login')
     form_class = VehicleCreateForm
     success_url = reverse_lazy('info')
+    permission_required = ('api.add_vehicle')
 
     def get_form_kwargs(self):
         kwargs = super(VehicleCreateView, self).get_form_kwargs()
@@ -134,12 +138,14 @@ class VehicleCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         return self.request.user.groups.filter(name='Manager').exists()
 
 
-class VehicleUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class VehicleUpdateView(LoginRequiredMixin, PermissionRequiredMixin,
+                        UserPassesTestMixin, UpdateView):
     template_name = 'add_or_edit_object_form.html'
     model = Vehicle
     login_url = reverse_lazy('login')
     form_class = VehicleCreateForm
     success_url = reverse_lazy('info')
+    permission_required = ('api.change_vehicle')
 
     def get_form_kwargs(self):
         kwargs = super(VehicleUpdateView, self).get_form_kwargs()
@@ -153,11 +159,13 @@ class VehicleUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return self.request.user.groups.filter(name='Manager').exists()
 
 
-class VehicleDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+class VehicleDeleteView(LoginRequiredMixin, PermissionRequiredMixin,
+                        UserPassesTestMixin, DeleteView):
     template_name = 'delete_object_form.html'
     model = Vehicle
     login_url = reverse_lazy('login')
     success_url = reverse_lazy('info')
+    permission_required = ('api.delete_vehicle')
 
     def test_func(self):
         # Только менеджер может удалить машину
@@ -221,12 +229,14 @@ class MaintenanceView(LoginRequiredMixin, ListView):
         return qs
 
 
-class MaintenanceCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+class MaintenanceCreateView(LoginRequiredMixin, PermissionRequiredMixin,
+                            UserPassesTestMixin, CreateView):
     template_name = 'add_or_edit_object_form.html'
     model = Maintenance
     login_url = reverse_lazy('login')
     form_class = MaintenanceCreateForm
     success_url = reverse_lazy('maintenance')
+    permission_required = ('api.add_maintenance')
 
     def get_form_kwargs(self):
         kwargs = super(MaintenanceCreateView, self).get_form_kwargs()
@@ -243,12 +253,14 @@ class MaintenanceCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView)
         ])
 
 
-class MaintenanceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class MaintenanceUpdateView(LoginRequiredMixin, PermissionRequiredMixin,
+                            UserPassesTestMixin, UpdateView):
     template_name = 'add_or_edit_object_form.html'
     model = Maintenance
     login_url = reverse_lazy('login')
     success_url = reverse_lazy('maintenance')
     form_class = MaintenanceCreateForm
+    permission_required = ('api.change_maintenance')
 
     def get_form_kwargs(self):
         kwargs = super(MaintenanceUpdateView, self).get_form_kwargs()
@@ -283,11 +295,13 @@ class MaintenanceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView)
         return False
 
 
-class MaintenanceDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+class MaintenanceDeleteView(LoginRequiredMixin, PermissionRequiredMixin,
+                            UserPassesTestMixin, DeleteView):
     template_name = 'delete_object_form.html'
     model = Maintenance
     login_url = reverse_lazy('login')
     success_url = reverse_lazy('maintenance')
+    permission_required = ('api.delete_maintenance')
 
     def test_func(self):
         user = self.request.user
@@ -373,12 +387,14 @@ class ReclamationView(LoginRequiredMixin, ListView):
         return qs
 
 
-class ReclamationCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+class ReclamationCreateView(LoginRequiredMixin, PermissionRequiredMixin,
+                            UserPassesTestMixin, CreateView):
     template_name = 'add_or_edit_object_form.html'
     model = Reclamation
     login_url = reverse_lazy('login')
     success_url = reverse_lazy('reclamation')
     form_class = ReclamationCreateForm
+    permission_required = ('api.add_reclamation')
 
     def get_form_kwargs(self):
         kwargs = super(ReclamationCreateView, self).get_form_kwargs()
@@ -408,12 +424,14 @@ class ReclamationCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView)
         return False
 
 
-class ReclamationUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class ReclamationUpdateView(LoginRequiredMixin,PermissionRequiredMixin,
+                            UserPassesTestMixin, UpdateView):
     template_name = 'add_or_edit_object_form.html'
     model = Reclamation
     login_url = reverse_lazy('login')
     success_url = reverse_lazy('reclamation')
     form_class = ReclamationCreateForm
+    permission_required = ('api.change_reclamation')
 
     def get_form_kwargs(self):
         kwargs = super(ReclamationUpdateView, self).get_form_kwargs()
@@ -443,11 +461,13 @@ class ReclamationUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView)
         return False
 
 
-class ReclamationDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+class ReclamationDeleteView(LoginRequiredMixin,PermissionRequiredMixin,
+                            UserPassesTestMixin, DeleteView):
     template_name = 'delete_object_form.html'
     model = Reclamation
     login_url = reverse_lazy('login')
     success_url = reverse_lazy('reclamation')
+    permission_required = ('api.delete_reclamation')
 
     def test_func(self):
         user = self.request.user
@@ -475,7 +495,8 @@ class HandbookDetailView(DetailView):
     model = Handbook
 
 
-class HandbookCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+class HandbookCreateView(LoginRequiredMixin, PermissionRequiredMixin,
+                         UserPassesTestMixin, CreateView):
     template_name = 'add_or_edit_object_form.html'
     model = Handbook
     fields = [
@@ -485,13 +506,15 @@ class HandbookCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     ]
     login_url = reverse_lazy('login')
     success_url = reverse_lazy('info')
+    permission_required = ('api.add_handbook')
 
     def test_func(self):
         # Только менеджер может создать справочник
         return self.request.user.groups.filter(name='Manager').exists()
 
 
-class HandbookUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class HandbookUpdateView(LoginRequiredMixin, PermissionRequiredMixin,
+                         UserPassesTestMixin, UpdateView):
     template_name = 'add_or_edit_object_form.html'
     model = Handbook
     fields = [
@@ -501,17 +524,20 @@ class HandbookUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     ]
     login_url = reverse_lazy('login')
     success_url = reverse_lazy('info')
+    permission_required = ('api.change_handbook')
 
     def test_func(self):
         # Только менеджер может редактировать справочник
         return self.request.user.groups.filter(name='Manager').exists()
 
 
-class HandbookDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+class HandbookDeleteView(LoginRequiredMixin, PermissionRequiredMixin,
+                         UserPassesTestMixin, DeleteView):
     template_name = 'delete_object_form.html'
     model = Handbook
     login_url = reverse_lazy('login')
     success_url = reverse_lazy('info')
+    permission_required = ('api.delete_handbook')
 
     def test_func(self):
         # Только менеджер может удалить справочник
