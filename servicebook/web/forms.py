@@ -44,6 +44,51 @@ class UserLoginForm(forms.Form):
         return super(UserLoginForm, self).clean(*args, **kwargs)
 
 
+class VehicleCreateForm(forms.ModelForm):
+    class Meta:
+        model = Vehicle
+        fields = [
+            'vehicle_model',
+            'vehicle_id',
+            'engine_model',
+            'engine_id',
+            'transmission_model',
+            'transmission_id',
+            'main_axle_model',
+            'main_axle_id',
+            'driven_axle_model',
+            'driven_axle_id',
+            'shipping_date',
+            'client',
+            'consignee',
+            'shipping_address',
+            'equipment',
+            'service_company',
+        ]
+
+    def __init__(self, *args, **kwargs):
+        # Пользователь нам нужен, но его передача в конструктор базового
+        # класса вызовет ошибку, поэтому извлекаем его.
+        user = kwargs.pop('user', None)
+        super(VehicleCreateForm, self).__init__(*args, **kwargs)
+
+        # Устанавливаем значения для выпадающих списков формы
+        self.fields['vehicle_model'].queryset = Handbook.objects.filter(
+            handbook_name='VM')
+        self.fields['engine_model'].queryset = Handbook.objects.filter(
+            handbook_name='EM')
+        self.fields['transmission_model'].queryset = Handbook.objects.filter(
+            handbook_name='TM')
+        self.fields['main_axle_model'].queryset = Handbook.objects.filter(
+            handbook_name='MA')
+        self.fields['driven_axle_model'].queryset = Handbook.objects.filter(
+            handbook_name='DA')
+        self.fields['client'].queryset = User.objects.filter(
+            groups__name__in=['Client'])
+        self.fields['service_company'].queryset = User.objects.filter(
+            groups__name__in=['ServiceCompany'])
+
+
 class MaintenanceCreateForm(forms.ModelForm):
     class Meta:
         model = Maintenance

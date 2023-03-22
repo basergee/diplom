@@ -6,7 +6,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 
 from api.models import Vehicle, Handbook, Maintenance, Reclamation
-from .forms import UserLoginForm, MaintenanceCreateForm, ReclamationCreateForm
+from .forms import (UserLoginForm, MaintenanceCreateForm,
+                    ReclamationCreateForm, VehicleCreateForm)
 
 
 def login_view(request):
@@ -116,49 +117,67 @@ class VehiclesView(LoginRequiredMixin, ListView):
 class VehicleCreateView(LoginRequiredMixin, CreateView):
     template_name = 'add_or_edit_object_form.html'
     model = Vehicle
-    fields = [
-        'vehicle_model',
-        'vehicle_id',
-        'engine_model',
-        'engine_id',
-        'transmission_model',
-        'transmission_id',
-        'main_axle_model',
-        'main_axle_id',
-        'driven_axle_model',
-        'driven_axle_id',
-        'shipping_date',
-        'client',
-        'consignee',
-        'shipping_address',
-        'equipment',
-        'service_company',
-    ]
+    # fields = [
+    #     'vehicle_model',
+    #     'vehicle_id',
+    #     'engine_model',
+    #     'engine_id',
+    #     'transmission_model',
+    #     'transmission_id',
+    #     'main_axle_model',
+    #     'main_axle_id',
+    #     'driven_axle_model',
+    #     'driven_axle_id',
+    #     'shipping_date',
+    #     'client',
+    #     'consignee',
+    #     'shipping_address',
+    #     'equipment',
+    #     'service_company',
+    # ]
     login_url = reverse_lazy('login')
+    form_class = VehicleCreateForm
+    success_url = reverse_lazy('info')
+
+    def get_form_kwargs(self):
+        kwargs = super(VehicleCreateView, self).get_form_kwargs()
+        # Добавляем текущего пользователя к форме, чтобы можно было
+        # отфильтровать поля в форме
+        kwargs.update({'user': self.request.user})
+        return kwargs
 
 
 class VehicleUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'add_or_edit_object_form.html'
     model = Vehicle
-    fields = [
-        'vehicle_model',
-        'vehicle_id',
-        'engine_model',
-        'engine_id',
-        'transmission_model',
-        'transmission_id',
-        'main_axle_model',
-        'main_axle_id',
-        'driven_axle_model',
-        'driven_axle_id',
-        'shipping_date',
-        'client',
-        'consignee',
-        'shipping_address',
-        'equipment',
-        'service_company',
-    ]
+    # fields = [
+    #     'vehicle_model',
+    #     'vehicle_id',
+    #     'engine_model',
+    #     'engine_id',
+    #     'transmission_model',
+    #     'transmission_id',
+    #     'main_axle_model',
+    #     'main_axle_id',
+    #     'driven_axle_model',
+    #     'driven_axle_id',
+    #     'shipping_date',
+    #     'client',
+    #     'consignee',
+    #     'shipping_address',
+    #     'equipment',
+    #     'service_company',
+    # ]
     login_url = reverse_lazy('login')
+    form_class = VehicleCreateForm
+    success_url = reverse_lazy('info')
+
+    def get_form_kwargs(self):
+        kwargs = super(VehicleUpdateView, self).get_form_kwargs()
+        # Добавляем текущего пользователя к форме, чтобы можно было
+        # отфильтровать поля в форме
+        kwargs.update({'user': self.request.user})
+        return kwargs
 
 
 class MaintenanceView(LoginRequiredMixin, ListView):
