@@ -72,7 +72,7 @@
                     <tr>
                         <td>
                             <a class="btn bg-transparent border" href="{% url 'reclamation_edit' v.pk %}"><i class="fa fa-pen"></i></a>
-                            <a class="btn bg-transparent border" href="#"><i class="fa fa-trash"></i></a>
+                            <a class="btn bg-transparent border" href="{% url 'reclamation_delete' v.pk %}"><i class="fa fa-trash"></i></a>
                         </td>
                         <td>{{v.failure_date}}</td>
                         <td>{{v.operating_time}}</td>

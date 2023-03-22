@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import (ListView, DetailView, CreateView, UpdateView,
+                                  DeleteView)
 from django.db.models import Q
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -180,6 +181,13 @@ class VehicleUpdateView(LoginRequiredMixin, UpdateView):
         return kwargs
 
 
+class VehicleDeleteView(LoginRequiredMixin, DeleteView):
+    template_name = 'delete_object_form.html'
+    model = Vehicle
+    login_url = reverse_lazy('login')
+    success_url = reverse_lazy('info')
+
+
 class MaintenanceView(LoginRequiredMixin, ListView):
     template_name = 'maintenance.html'
     model = Maintenance
@@ -318,6 +326,13 @@ class MaintenanceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView)
         return False
 
 
+class MaintenanceDeleteView(LoginRequiredMixin, DeleteView):
+    template_name = 'delete_object_form.html'
+    model = Maintenance
+    login_url = reverse_lazy('login')
+    success_url = reverse_lazy('maintenance')
+
+
 class ReclamationView(LoginRequiredMixin, ListView):
     template_name = 'reclamation.html'
     model = Reclamation
@@ -425,6 +440,13 @@ class ReclamationUpdateView(LoginRequiredMixin, UpdateView):
         # отфильтровать поля в форме
         kwargs.update({'user': self.request.user})
         return kwargs
+
+
+class ReclamationDeleteView(LoginRequiredMixin, DeleteView):
+    template_name = 'delete_object_form.html'
+    model = Reclamation
+    login_url = reverse_lazy('login')
+    success_url = reverse_lazy('reclamation')
 
 
 class HandbookDetailView(DetailView):

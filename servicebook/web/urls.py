@@ -5,7 +5,8 @@ from .views import (VehiclesView, HandbookDetailView, MaintenanceView,
                     VehicleCreateView, HandbookUpdateView,
                     ReclamationCreateView, ReclamationUpdateView,
                     MaintenanceCreateView, MaintenanceUpdateView,
-                    VehicleUpdateView, HandbookCreateView)
+                    VehicleUpdateView, HandbookCreateView, VehicleDeleteView,
+                    MaintenanceDeleteView, ReclamationDeleteView)
 
 
 urlpatterns = [
@@ -17,14 +18,17 @@ urlpatterns = [
     path('vehicle/', VehiclesView.as_view(), name='info'),
     path('vehicle/add/', VehicleCreateView.as_view(), name='vehicle_add'),
     path('vehicle/edit/<int:pk>/', VehicleUpdateView.as_view(), name='vehicle_edit'),
+    path('vehicle/delete/<int:pk>/', VehicleDeleteView.as_view(), name='vehicle_delete'),
 
     path('maintenance/', MaintenanceView.as_view(), name='maintenance'),
     path('maintenance/add', MaintenanceCreateView.as_view(), name='maintenance_add'),
     path('maintenance/edit/<int:pk>/', MaintenanceUpdateView.as_view(), name='maintenance_edit'),
+    path('maintenance/delete/<int:pk>/', MaintenanceDeleteView.as_view(), name='maintenance_delete'),
 
     path('reclamation/', ReclamationView.as_view(), name='reclamation'),
     path('reclamation/add/', ReclamationCreateView.as_view(), name='reclamation_add'),
     path('reclamation/edit/<int:pk>/', ReclamationUpdateView.as_view(), name='reclamation_edit'),
+    path('reclamation/delete/<int:pk>/', ReclamationDeleteView.as_view(), name='reclamation_delete'),
 
     path('hb/<int:pk>/', HandbookDetailView.as_view(), name='handbook_detail'),
     path('hb/add/', HandbookCreateView.as_view(), name='handbook_add'),

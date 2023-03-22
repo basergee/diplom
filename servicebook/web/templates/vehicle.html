@@ -87,7 +87,7 @@
                     <tr>
                         <td>
                             <a class="btn bg-transparent border" href="{% url 'vehicle_edit' v.pk %}"><i class="fa fa-pen"></i></a>
-                            <a class="btn bg-transparent border" href="#"><i class="fa fa-trash"></i></a>
+                            <a class="btn bg-transparent border" href="{% url 'vehicle_delete' v.pk %}"><i class="fa fa-trash"></i></a>
                         </td>
                         <td>{{v.vehicle_id}}</td>
                         <td><a href="{% url 'handbook_detail' v.vehicle_model.pk %}"/>{{v.vehicle_model}}</td>
