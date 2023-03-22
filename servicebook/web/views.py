@@ -250,7 +250,7 @@ class MaintenanceCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView)
         ])
 
 
-class MaintenanceUpdateView(LoginRequiredMixin, UpdateView):
+class MaintenanceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     template_name = 'add_or_edit_object_form.html'
     model = Maintenance
     fields = [
@@ -263,6 +263,32 @@ class MaintenanceUpdateView(LoginRequiredMixin, UpdateView):
         'service_company',
     ]
     login_url = reverse_lazy('login')
+    success_url = reverse_lazy('maintenance')
+
+    def test_func(self):
+        user = self.request.user
+
+        if user.groups.filter(name='Manager').exists():
+            # Менеджер может редактировать любой объект
+            return True
+
+        # Узнаем ключ объекта, который пытаемся редактировать
+        maintenance_id = int(self.request.path.split('/')[-2])
+
+        # Чтобы иметь доступ, пользователь должен быть клиентом, владеющим
+        # машиной, или сервисной компанией, обслуживающей машину
+        if user.groups.filter(name='Client').exists():
+            # Пользователь -- клиент. Проверим, что машина, запись о ТО которой
+            # хочет получить пользователь, принадлежит ему
+            return Maintenance.objects.get(pk=maintenance_id).vehicle.client == user
+
+        if user.groups.filter(name='ServiceCompany').exists():
+            # Пользователь -- сервисная компания. Проверим, что машина, запись
+            # о ТО которой хочет получить пользователь, обслуживается
+            # этой сервисной компанией
+            return Maintenance.objects.get(pk=maintenance_id).service_company == user
+
+        return False
 
 
 class ReclamationView(LoginRequiredMixin, ListView):
