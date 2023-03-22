@@ -253,17 +253,25 @@ class MaintenanceCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView)
 class MaintenanceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     template_name = 'add_or_edit_object_form.html'
     model = Maintenance
-    fields = [
-        'vehicle',
-        'maintenance_type',
-        'maintenance_date',
-        'operating_time',
-        'work_order_id',
-        'work_order_date',
-        'service_company',
-    ]
+    # fields = [
+    #     'vehicle',
+    #     'maintenance_type',
+    #     'maintenance_date',
+    #     'operating_time',
+    #     'work_order_id',
+    #     'work_order_date',
+    #     'service_company',
+    # ]
     login_url = reverse_lazy('login')
     success_url = reverse_lazy('maintenance')
+    form_class = MaintenanceCreateForm
+
+    def get_form_kwargs(self):
+        kwargs = super(MaintenanceUpdateView, self).get_form_kwargs()
+        # Добавляем текущего пользователя к форме, чтобы можно было
+        # отфильтровать поля в форме
+        kwargs.update({'user': self.request.user})
+        return kwargs
 
     def test_func(self):
         user = self.request.user
