@@ -62,6 +62,7 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
+                            <th scope="col">Действия</th>
                             <th scope="col">Зав. № машины</th>
                             <th scope="col">Модель техники</th>
                             <th scope="col">Модель двигателя</th>
@@ -84,6 +85,10 @@
                     <tbody>
                     {% for v in vehicle_list %}
                     <tr>
+                        <td>
+                            <a class="btn bg-transparent border" href="{% url 'vehicle_edit' v.pk %}"><i class="fa fa-pen"></i></a>
+                            <a class="btn bg-transparent border" href="#"><i class="fa fa-trash"></i></a>
+                        </td>
                         <td>{{v.vehicle_id}}</td>
                         <td><a href="{% url 'handbook_detail' v.vehicle_model.pk %}"/>{{v.vehicle_model}}</td>
                         <td><a href="{% url 'handbook_detail' v.engine_model.pk %}"/>{{v.engine_model}}</td>

@@ -54,6 +54,7 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
+                            <th scope="col">Действия</th>
                             <th scope="col">Дата отказа</th>
                             <th scope="col">Наработка, м/час</th>
                             <th scope="col">Узел отказа</th>
@@ -69,6 +70,10 @@
                     <tbody>
                     {% for v in reclamation_list %}
                     <tr>
+                        <td>
+                            <a class="btn bg-transparent border" href="{% url 'reclamation_edit' v.pk %}"><i class="fa fa-pen"></i></a>
+                            <a class="btn bg-transparent border" href="#"><i class="fa fa-trash"></i></a>
+                        </td>
                         <td>{{v.failure_date}}</td>
                         <td>{{v.operating_time}}</td>
                         <td><a href="{% url 'handbook_detail' v.failure_node.pk %}"/>{{v.failure_node}}</td>

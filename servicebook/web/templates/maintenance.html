@@ -54,6 +54,7 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
+                            <th scope="col">Действия</th>
                             <th scope="col">Вид ТО</th>
                             <th scope="col">Дата проведения ТО</th>
                             <th scope="col">Наработка, м/час</th>
@@ -66,6 +67,10 @@
                     <tbody>
                     {% for v in maintenance_list %}
                     <tr>
+                        <td>
+                            <a class="btn bg-transparent border" href="{% url 'maintenance_edit' v.pk %}"><i class="fa fa-pen"></i></a>
+                            <a class="btn bg-transparent border" href="#"><i class="fa fa-trash"></i></a>
+                        </td>
                         <td><a href="{% url 'handbook_detail' v.maintenance_type.pk %}"/>{{v.maintenance_type}}</td>
                         <td>{{v.maintenance_date}}</td>
                         <td>{{v.operating_time}}</td>
