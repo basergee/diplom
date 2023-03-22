@@ -18,8 +18,10 @@
           integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
           crossorigin="anonymous">
 
-    <!--    <link rel="stylesheet" href="css/bootstrap-breakpoint.css">-->
-    <!--    <link rel="stylesheet" href="css/stylesheet.css">-->
+    {% load static %}
+
+        <link rel="stylesheet" href="{% static 'web/css/bootstrap-breakpoint.css' %}">
+        <link rel="stylesheet" href="{% static 'web/css/stylesheet.css' %}">
 
     <title>
         {% block title %}
@@ -30,7 +32,7 @@
 <body>
     <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
         <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
-            Logo
+            <img class="col-4" src="{% static 'web/images/Logotype accent RGB 1.jpg' %}">
         </a>
 
         <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
