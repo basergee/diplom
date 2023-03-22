@@ -56,13 +56,20 @@
             </div>
         </div>
 
+        <!-- Кнопка добавления нового объекта -->
+        {% if perms.api.add_vehicle %}
+        <a href="{% url 'vehicle_add' %}" class="btn btn-primary">Добавить</a>
+        {% endif %}
+
         <!-- Таблица с данными -->
         <div class="row">
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
                         <tr>
+                            {% if perms.api.change_vehicle and perms.api.delete_vehicle %}
                             <th scope="col">Действия</th>
+                            {% endif %}
                             <th scope="col">Зав. № машины</th>
                             <th scope="col">Модель техники</th>
                             <th scope="col">Модель двигателя</th>
@@ -85,10 +92,12 @@
                     <tbody>
                     {% for v in vehicle_list %}
                     <tr>
+                        {% if perms.api.change_vehicle and perms.api.delete_vehicle %}
                         <td>
                             <a class="btn bg-transparent border" href="{% url 'vehicle_edit' v.pk %}"><i class="fa fa-pen"></i></a>
                             <a class="btn bg-transparent border" href="{% url 'vehicle_delete' v.pk %}"><i class="fa fa-trash"></i></a>
                         </td>
+                        {% endif %}
                         <td>{{v.vehicle_id}}</td>
                         <td><a href="{% url 'handbook_detail' v.vehicle_model.pk %}"/>{{v.vehicle_model}}</td>
                         <td><a href="{% url 'handbook_detail' v.engine_model.pk %}"/>{{v.engine_model}}</td>

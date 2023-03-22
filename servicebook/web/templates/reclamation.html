@@ -48,13 +48,20 @@
             </div>
         </div>
 
+        <!-- Кнопка добавления нового объекта -->
+        {% if perms.api.add_reclamation %}
+        <a href="{% url 'reclamation_add' %}" class="btn btn-primary">Добавить</a>
+        {% endif %}
+
         <!-- Таблица с данными -->
         <div class="row">
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
                         <tr>
+                            {% if perms.api.change_reclamation and perms.api.delete_reclamation %}
                             <th scope="col">Действия</th>
+                            {% endif %}
                             <th scope="col">Дата отказа</th>
                             <th scope="col">Наработка, м/час</th>
                             <th scope="col">Узел отказа</th>
@@ -70,10 +77,12 @@
                     <tbody>
                     {% for v in reclamation_list %}
                     <tr>
+                        {% if perms.api.change_reclamation and perms.api.delete_reclamation %}
                         <td>
                             <a class="btn bg-transparent border" href="{% url 'reclamation_edit' v.pk %}"><i class="fa fa-pen"></i></a>
                             <a class="btn bg-transparent border" href="{% url 'reclamation_delete' v.pk %}"><i class="fa fa-trash"></i></a>
                         </td>
+                        {% endif %}
                         <td>{{v.failure_date}}</td>
                         <td>{{v.operating_time}}</td>
                         <td><a href="{% url 'handbook_detail' v.failure_node.pk %}"/>{{v.failure_node}}</td>

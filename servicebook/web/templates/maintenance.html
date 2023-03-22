@@ -48,13 +48,20 @@
             </div>
         </div>
 
+        <!-- Кнопка добавления нового объекта -->
+        {% if perms.api.add_maintenance %}
+        <a href="{% url 'maintenance_add' %}" class="btn btn-primary">Добавить</a>
+        {% endif %}
+
         <!-- Таблица с данными -->
         <div class="row">
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
                         <tr>
+                            {% if perms.api.change_maintenance and perms.api.delete_maintenance %}
                             <th scope="col">Действия</th>
+                            {% endif %}
                             <th scope="col">Вид ТО</th>
                             <th scope="col">Дата проведения ТО</th>
                             <th scope="col">Наработка, м/час</th>
@@ -67,10 +74,12 @@
                     <tbody>
                     {% for v in maintenance_list %}
                     <tr>
+                        {% if perms.api.change_maintenance and perms.api.delete_maintenance %}
                         <td>
                             <a class="btn bg-transparent border" href="{% url 'maintenance_edit' v.pk %}"><i class="fa fa-pen"></i></a>
                             <a class="btn bg-transparent border" href="{% url 'maintenance_delete' v.pk %}"><i class="fa fa-trash"></i></a>
                         </td>
+                        {% endif %}
                         <td><a href="{% url 'handbook_detail' v.maintenance_type.pk %}"/>{{v.maintenance_type}}</td>
                         <td>{{v.maintenance_date}}</td>
                         <td>{{v.operating_time}}</td>
