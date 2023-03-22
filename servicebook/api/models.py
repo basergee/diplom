@@ -188,3 +188,8 @@ class Reclamation(models.Model):
     # Сервисная компания
     service_company = models.ForeignKey(User, on_delete=models.CASCADE,
                                         verbose_name='Сервисная компания')
+
+    def save(self, *args, **kwargs):
+        dt = self.repair_date - self.failure_date
+        self.downtime = dt.days
+        super().save(*args, **kwargs)
