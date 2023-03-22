@@ -118,24 +118,6 @@ class VehiclesView(LoginRequiredMixin, ListView):
 class VehicleCreateView(LoginRequiredMixin, CreateView):
     template_name = 'add_or_edit_object_form.html'
     model = Vehicle
-    # fields = [
-    #     'vehicle_model',
-    #     'vehicle_id',
-    #     'engine_model',
-    #     'engine_id',
-    #     'transmission_model',
-    #     'transmission_id',
-    #     'main_axle_model',
-    #     'main_axle_id',
-    #     'driven_axle_model',
-    #     'driven_axle_id',
-    #     'shipping_date',
-    #     'client',
-    #     'consignee',
-    #     'shipping_address',
-    #     'equipment',
-    #     'service_company',
-    # ]
     login_url = reverse_lazy('login')
     form_class = VehicleCreateForm
     success_url = reverse_lazy('info')
@@ -151,24 +133,6 @@ class VehicleCreateView(LoginRequiredMixin, CreateView):
 class VehicleUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'add_or_edit_object_form.html'
     model = Vehicle
-    # fields = [
-    #     'vehicle_model',
-    #     'vehicle_id',
-    #     'engine_model',
-    #     'engine_id',
-    #     'transmission_model',
-    #     'transmission_id',
-    #     'main_axle_model',
-    #     'main_axle_id',
-    #     'driven_axle_model',
-    #     'driven_axle_id',
-    #     'shipping_date',
-    #     'client',
-    #     'consignee',
-    #     'shipping_address',
-    #     'equipment',
-    #     'service_company',
-    # ]
     login_url = reverse_lazy('login')
     form_class = VehicleCreateForm
     success_url = reverse_lazy('info')
@@ -248,15 +212,6 @@ class MaintenanceView(LoginRequiredMixin, ListView):
 class MaintenanceCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     template_name = 'add_or_edit_object_form.html'
     model = Maintenance
-    # fields = [
-    #     'vehicle',
-    #     'maintenance_type',
-    #     'maintenance_date',
-    #     'operating_time',
-    #     'work_order_id',
-    #     'work_order_date',
-    #     'service_company',
-    # ]
     login_url = reverse_lazy('login')
     form_class = MaintenanceCreateForm
     success_url = reverse_lazy('maintenance')
@@ -269,7 +224,6 @@ class MaintenanceCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView)
         return kwargs
 
     def test_func(self):
-        print('----->')
         return any([
             self.request.user.groups.filter(name='Client').exists(),
             self.request.user.groups.filter(name='Service').exists(),
@@ -280,15 +234,6 @@ class MaintenanceCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView)
 class MaintenanceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     template_name = 'add_or_edit_object_form.html'
     model = Maintenance
-    # fields = [
-    #     'vehicle',
-    #     'maintenance_type',
-    #     'maintenance_date',
-    #     'operating_time',
-    #     'work_order_id',
-    #     'work_order_date',
-    #     'service_company',
-    # ]
     login_url = reverse_lazy('login')
     success_url = reverse_lazy('maintenance')
     form_class = MaintenanceCreateForm
@@ -394,17 +339,6 @@ class ReclamationView(LoginRequiredMixin, ListView):
 class ReclamationCreateView(LoginRequiredMixin, CreateView):
     template_name = 'add_or_edit_object_form.html'
     model = Reclamation
-    # fields = [
-    #     'vehicle',
-    #     'failure_date',
-    #     'operating_time',
-    #     'failure_node',
-    #     'failure_description',
-    #     'repair_description',
-    #     'spare_parts',
-    #     'repair_date',
-    #     'service_company',
-    # ]
     login_url = reverse_lazy('login')
     success_url = reverse_lazy('reclamation')
     form_class = ReclamationCreateForm
@@ -420,16 +354,6 @@ class ReclamationCreateView(LoginRequiredMixin, CreateView):
 class ReclamationUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'add_or_edit_object_form.html'
     model = Reclamation
-    # fields = [
-    #     'vehicle',
-    #     'failure_date',
-    #     'operating_time',
-    #     'failure_node',
-    #     'failure_description',
-    #     'repair_description',
-    #     'spare_parts',
-    #     'repair_date',
-    # ]
     login_url = reverse_lazy('login')
     success_url = reverse_lazy('reclamation')
     form_class = ReclamationCreateForm
@@ -452,12 +376,6 @@ class ReclamationDeleteView(LoginRequiredMixin, DeleteView):
 class HandbookDetailView(DetailView):
     template_name = 'handbook.html'
     model = Handbook
-    # context_object_name = 'handbook_detail'
-
-    # def get_context_data(self, **kwargs):
-        # context = super().get_context_data(**kwargs)
-        # context['now'] = timezone.now()
-        # return context
 
 
 class HandbookCreateView(LoginRequiredMixin, CreateView):
