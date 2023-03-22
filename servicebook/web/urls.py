@@ -6,7 +6,8 @@ from .views import (VehiclesView, HandbookDetailView, MaintenanceView,
                     ReclamationCreateView, ReclamationUpdateView,
                     MaintenanceCreateView, MaintenanceUpdateView,
                     VehicleUpdateView, HandbookCreateView, VehicleDeleteView,
-                    MaintenanceDeleteView, ReclamationDeleteView)
+                    MaintenanceDeleteView, ReclamationDeleteView,
+                    HandbookDeleteView)
 
 
 urlpatterns = [
@@ -33,4 +34,5 @@ urlpatterns = [
     path('hb/<int:pk>/', HandbookDetailView.as_view(), name='handbook_detail'),
     path('hb/add/', HandbookCreateView.as_view(), name='handbook_add'),
     path('hb/edit/<int:pk>/', HandbookUpdateView.as_view(), name='handbook_edit'),
+    path('hb/delete/<int:pk>/', HandbookDeleteView.as_view(), name='handbook_delete'),
 ]

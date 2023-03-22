@@ -115,7 +115,7 @@ class VehiclesView(LoginRequiredMixin, ListView):
         return qs
 
 
-class VehicleCreateView(LoginRequiredMixin, CreateView):
+class VehicleCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     template_name = 'add_or_edit_object_form.html'
     model = Vehicle
     login_url = reverse_lazy('login')
@@ -129,8 +129,12 @@ class VehicleCreateView(LoginRequiredMixin, CreateView):
         kwargs.update({'user': self.request.user})
         return kwargs
 
+    def test_func(self):
+        # Только менеджер может создать машину
+        return self.request.user.groups.filter(name='Manager').exists()
 
-class VehicleUpdateView(LoginRequiredMixin, UpdateView):
+
+class VehicleUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     template_name = 'add_or_edit_object_form.html'
     model = Vehicle
     login_url = reverse_lazy('login')
@@ -144,12 +148,20 @@ class VehicleUpdateView(LoginRequiredMixin, UpdateView):
         kwargs.update({'user': self.request.user})
         return kwargs
 
+    def test_func(self):
+        # Только менеджер может редактировать машину
+        return self.request.user.groups.filter(name='Manager').exists()
 
-class VehicleDeleteView(LoginRequiredMixin, DeleteView):
+
+class VehicleDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     template_name = 'delete_object_form.html'
     model = Vehicle
     login_url = reverse_lazy('login')
     success_url = reverse_lazy('info')
+
+    def test_func(self):
+        # Только менеджер может удалить машину
+        return self.request.user.groups.filter(name='Manager').exists()
 
 
 class MaintenanceView(LoginRequiredMixin, ListView):
@@ -361,7 +373,7 @@ class ReclamationView(LoginRequiredMixin, ListView):
         return qs
 
 
-class ReclamationCreateView(LoginRequiredMixin, CreateView):
+class ReclamationCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     template_name = 'add_or_edit_object_form.html'
     model = Reclamation
     login_url = reverse_lazy('login')
@@ -375,8 +387,28 @@ class ReclamationCreateView(LoginRequiredMixin, CreateView):
         kwargs.update({'user': self.request.user})
         return kwargs
 
+    def test_func(self):
+        user = self.request.user
 
-class ReclamationUpdateView(LoginRequiredMixin, UpdateView):
+        if user.groups.filter(name='Manager').exists():
+            # Менеджер может редактировать любой объект
+            return True
+
+        if user.groups.filter(name='ServiceCompany').exists():
+            # Узнаем ключ объекта, который пытаемся редактировать
+            reclamation_id = int(self.request.path.split('/')[-2])
+
+            # Пользователь -- сервисная компания. Проверим, что машина, запись
+            # о ТО которой хочет получить пользователь, обслуживается
+            # этой сервисной компанией
+            return Reclamation.objects.get(
+                pk=reclamation_id).service_company == user
+
+        # Больше никто не может создавать рекламации
+        return False
+
+
+class ReclamationUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     template_name = 'add_or_edit_object_form.html'
     model = Reclamation
     login_url = reverse_lazy('login')
@@ -390,12 +422,52 @@ class ReclamationUpdateView(LoginRequiredMixin, UpdateView):
         kwargs.update({'user': self.request.user})
         return kwargs
 
+    def test_func(self):
+        user = self.request.user
 
-class ReclamationDeleteView(LoginRequiredMixin, DeleteView):
+        if user.groups.filter(name='Manager').exists():
+            # Менеджер может редактировать любой объект
+            return True
+
+        if user.groups.filter(name='ServiceCompany').exists():
+            # Узнаем ключ объекта, который пытаемся редактировать
+            reclamation_id = int(self.request.path.split('/')[-2])
+
+            # Пользователь -- сервисная компания. Проверим, что машина, запись
+            # о ТО которой хочет получить пользователь, обслуживается
+            # этой сервисной компанией
+            return Reclamation.objects.get(
+                pk=reclamation_id).service_company == user
+
+        # Больше никто не может редактировать рекламации
+        return False
+
+
+class ReclamationDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     template_name = 'delete_object_form.html'
     model = Reclamation
     login_url = reverse_lazy('login')
     success_url = reverse_lazy('reclamation')
+
+    def test_func(self):
+        user = self.request.user
+
+        if user.groups.filter(name='Manager').exists():
+            # Менеджер может редактировать любой объект
+            return True
+
+        if user.groups.filter(name='ServiceCompany').exists():
+            # Узнаем ключ объекта, который пытаемся редактировать
+            reclamation_id = int(self.request.path.split('/')[-2])
+
+            # Пользователь -- сервисная компания. Проверим, что машина, запись
+            # о ТО которой хочет получить пользователь, обслуживается
+            # этой сервисной компанией
+            return Reclamation.objects.get(
+                pk=reclamation_id).service_company == user
+
+        # Больше никто не может удалять рекламации
+        return False
 
 
 class HandbookDetailView(DetailView):
@@ -403,7 +475,7 @@ class HandbookDetailView(DetailView):
     model = Handbook
 
 
-class HandbookCreateView(LoginRequiredMixin, CreateView):
+class HandbookCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     template_name = 'add_or_edit_object_form.html'
     model = Handbook
     fields = [
@@ -412,9 +484,14 @@ class HandbookCreateView(LoginRequiredMixin, CreateView):
         'description'
     ]
     login_url = reverse_lazy('login')
+    success_url = reverse_lazy('info')
+
+    def test_func(self):
+        # Только менеджер может создать справочник
+        return self.request.user.groups.filter(name='Manager').exists()
 
 
-class HandbookUpdateView(LoginRequiredMixin, UpdateView):
+class HandbookUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     template_name = 'add_or_edit_object_form.html'
     model = Handbook
     fields = [
@@ -423,3 +500,19 @@ class HandbookUpdateView(LoginRequiredMixin, UpdateView):
         'description'
     ]
     login_url = reverse_lazy('login')
+    success_url = reverse_lazy('info')
+
+    def test_func(self):
+        # Только менеджер может редактировать справочник
+        return self.request.user.groups.filter(name='Manager').exists()
+
+
+class HandbookDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    template_name = 'delete_object_form.html'
+    model = Handbook
+    login_url = reverse_lazy('login')
+    success_url = reverse_lazy('info')
+
+    def test_func(self):
+        # Только менеджер может удалить справочник
+        return self.request.user.groups.filter(name='Manager').exists()
