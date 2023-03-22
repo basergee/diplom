@@ -7,7 +7,7 @@ from .views import (VehiclesView, HandbookDetailView, MaintenanceView,
                     MaintenanceCreateView, MaintenanceUpdateView,
                     VehicleUpdateView, HandbookCreateView, VehicleDeleteView,
                     MaintenanceDeleteView, ReclamationDeleteView,
-                    HandbookDeleteView)
+                    HandbookDeleteView, HandbookView)
 
 
 urlpatterns = [
@@ -31,8 +31,9 @@ urlpatterns = [
     path('reclamation/edit/<int:pk>/', ReclamationUpdateView.as_view(), name='reclamation_edit'),
     path('reclamation/delete/<int:pk>/', ReclamationDeleteView.as_view(), name='reclamation_delete'),
 
-    path('hb/<int:pk>/', HandbookDetailView.as_view(), name='handbook_detail'),
-    path('hb/add/', HandbookCreateView.as_view(), name='handbook_add'),
-    path('hb/edit/<int:pk>/', HandbookUpdateView.as_view(), name='handbook_edit'),
-    path('hb/delete/<int:pk>/', HandbookDeleteView.as_view(), name='handbook_delete'),
+    path('handbook/', HandbookView.as_view(), name='handbook'),
+    path('handbook/<int:pk>/', HandbookDetailView.as_view(), name='handbook_detail'),
+    path('handbook/add/', HandbookCreateView.as_view(), name='handbook_add'),
+    path('handbook/edit/<int:pk>/', HandbookUpdateView.as_view(), name='handbook_edit'),
+    path('handbook/delete/<int:pk>/', HandbookDeleteView.as_view(), name='handbook_delete'),
 ]

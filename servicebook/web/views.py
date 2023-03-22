@@ -490,6 +490,18 @@ class ReclamationDeleteView(LoginRequiredMixin,PermissionRequiredMixin,
         return False
 
 
+class HandbookView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+    template_name = 'handbook_all.html'
+    model = Handbook
+    ordering = 'handbook_name'
+    login_url = reverse_lazy('login')
+    context_object_name = 'handbook_list'
+
+    def test_func(self):
+        # Только менеджер может смотреть все справочники разом
+        return self.request.user.groups.filter(name='Manager').exists()
+
+
 class HandbookDetailView(DetailView):
     template_name = 'handbook.html'
     model = Handbook

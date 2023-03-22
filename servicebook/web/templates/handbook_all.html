@@ -1,0 +1,69 @@
+{% extends 'main.html' %}
+
+{% block content %}
+    <div class="container">
+        <!-- Приветствие -->
+        <div class="div row">
+            <div class="div col text-center">
+                <p class="fs-3">{{ user.first_name }}</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col text-center">
+                <p class="fs-3">Информация о справочниках</p>
+            </div>
+        </div>
+
+        <!-- Кнопки навигации -->
+        <div class="row">
+            <div class="col">
+                <div class="btn-group d-flex justify-content-evenly">
+                    <a href="{% url 'info' %}" class="btn btn-light border border-4 rounded-pill" aria-current="page">Общая информация</a>
+                    <a href="{% url 'maintenance' %}" class="btn btn-light border border-4 rounded-pill">ТО</a>
+                    <a href="{% url 'reclamation' %}" class="btn btn-light border border-4 rounded-pill">Рекламации</a>
+                    {% if perms.api.change_handbook and perms.api.delete_handbook %}
+                    <a href="{% url 'handbook' %}" class="btn btn-primary rounded-pill active">Справочники</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Кнопка добавления нового объекта -->
+        {% if perms.api.add_handbook %}
+        <a href="{% url 'handbook_add' %}" class="btn btn-primary">Добавить</a>
+        {% endif %}
+
+        <!-- Таблица с данными -->
+        <div class="row">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            {% if perms.api.change_handbook and perms.api.delete_handbook %}
+                            <th scope="col">Действия</th>
+                            {% endif %}
+                            <th scope="col">Название справочника</th>
+                            <th scope="col">Название</th>
+                            <th scope="col">Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for v in handbook_list %}
+                    <tr>
+                        {% if perms.api.change_handbook and perms.api.delete_handbook %}
+                        <td>
+                            <a class="btn bg-transparent border" href="{% url 'handbook_edit' v.pk %}"><i class="fa fa-pen"></i></a>
+                            <a class="btn bg-transparent border" href="{% url 'handbook_delete' v.pk %}"><i class="fa fa-trash"></i></a>
+                        </td>
+                        {% endif %}
+                        <td>{{v.get_handbook_name_display}}</td>
+                        <td>{{v.title}}</td>
+                        <td>{{v.description}}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

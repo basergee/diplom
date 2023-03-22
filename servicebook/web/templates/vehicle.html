@@ -18,9 +18,12 @@
         <div class="row">
             <div class="col">
                 <div class="btn-group d-flex justify-content-evenly">
-                  <a href="{% url 'info' %}" class="btn btn-primary rounded-pill active" aria-current="page">Общая информация</a>
-                  <a href="{% url 'maintenance' %}" class="btn btn-light border border-4 rounded-pill">ТО</a>
-                  <a href="{% url 'reclamation' %}" class="btn btn-light border border-4 rounded-pill">Рекламации</a>
+                    <a href="{% url 'info' %}" class="btn btn-primary rounded-pill active" aria-current="page">Общая информация</a>
+                    <a href="{% url 'maintenance' %}" class="btn btn-light border border-4 rounded-pill">ТО</a>
+                    <a href="{% url 'reclamation' %}" class="btn btn-light border border-4 rounded-pill">Рекламации</a>
+                    {% if perms.api.change_handbook and perms.api.delete_handbook %}
+                        <a href="{% url 'handbook' %}" class="btn btn-light border border-4 rounded-pill">Справочники</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
