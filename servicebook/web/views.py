@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 
 from api.models import Vehicle, Handbook, Maintenance, Reclamation
-from .forms import UserLoginForm, MaintenanceCreateForm
+from .forms import UserLoginForm, MaintenanceCreateForm, ReclamationCreateForm
 
 
 def login_view(request):
@@ -360,35 +360,52 @@ class ReclamationView(LoginRequiredMixin, ListView):
 class ReclamationCreateView(LoginRequiredMixin, CreateView):
     template_name = 'add_or_edit_object_form.html'
     model = Reclamation
-    fields = [
-        'vehicle',
-        'failure_date',
-        'operating_time',
-        'failure_node',
-        'failure_description',
-        'repair_description',
-        'spare_parts',
-        'repair_date',
-        'downtime',
-    ]
+    # fields = [
+    #     'vehicle',
+    #     'failure_date',
+    #     'operating_time',
+    #     'failure_node',
+    #     'failure_description',
+    #     'repair_description',
+    #     'spare_parts',
+    #     'repair_date',
+    #     'service_company',
+    # ]
     login_url = reverse_lazy('login')
+    success_url = reverse_lazy('reclamation')
+    form_class = ReclamationCreateForm
+
+    def get_form_kwargs(self):
+        kwargs = super(ReclamationCreateView, self).get_form_kwargs()
+        # Добавляем текущего пользователя к форме, чтобы можно было
+        # отфильтровать поля в форме
+        kwargs.update({'user': self.request.user})
+        return kwargs
 
 
 class ReclamationUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'add_or_edit_object_form.html'
     model = Reclamation
-    fields = [
-        'vehicle',
-        'failure_date',
-        'operating_time',
-        'failure_node',
-        'failure_description',
-        'repair_description',
-        'spare_parts',
-        'repair_date',
-        'downtime',
-    ]
+    # fields = [
+    #     'vehicle',
+    #     'failure_date',
+    #     'operating_time',
+    #     'failure_node',
+    #     'failure_description',
+    #     'repair_description',
+    #     'spare_parts',
+    #     'repair_date',
+    # ]
     login_url = reverse_lazy('login')
+    success_url = reverse_lazy('reclamation')
+    form_class = ReclamationCreateForm
+
+    def get_form_kwargs(self):
+        kwargs = super(ReclamationUpdateView, self).get_form_kwargs()
+        # Добавляем текущего пользователя к форме, чтобы можно было
+        # отфильтровать поля в форме
+        kwargs.update({'user': self.request.user})
+        return kwargs
 
 
 class HandbookDetailView(DetailView):
