@@ -17,10 +17,10 @@
         <!-- Кнопки навигации -->
         <div class="row">
             <div class="col">
-                <div class="btn-group">
-                  <a href="{% url 'info' %}" class="btn btn-primary" aria-current="page">Общая информация</a>
-                  <a href="{% url 'maintenance' %}" class="btn btn-primary active">ТО</a>
-                  <a href="{% url 'reclamation' %}" class="btn btn-primary">Рекламации</a>
+                <div class="btn-group d-flex justify-content-evenly">
+                  <a href="{% url 'info' %}" class="btn btn-light border border-4 rounded-pill" aria-current="page">Общая информация</a>
+                  <a href="{% url 'maintenance' %}" class="btn btn-primary rounded-pill active">ТО</a>
+                  <a href="{% url 'reclamation' %}" class="btn btn-light border border-4 rounded-pill">Рекламации</a>
                 </div>
             </div>
         </div>
@@ -28,22 +28,20 @@
         <!-- Форма для фильтрации данных -->
         <div class="row">
             <div class="col">
-                <form method="GET" action=".">
+                <form method="GET" action="." class="py-5">
                     <div class="form-row">
-                        <div class="input-group">
-                            <input type="search" name="mtype" placeholder="Вид ТО"/>
-                            <span class="input-group-append">
-                                <div class="input-group-text bg-transparent">
-                                    <i class="fa fa-search"></i>
-                                </div>
-                            </span>
+                        <div class="input-group mb-4">
+                            <button class="input-group-text bg-transparent" type="button"><i class="fa fa-search"></i></button>
+                            <input class="form-control" type="search" name="mtype" placeholder="Вид ТО"/>
                         </div>
-                    </div>
-                    <div class="form-row">
-                        <input type="search" name="vehicle" placeholder="Зав № машины"/>
-                    </div>
-                    <div class="form-row">
-                        <input type="search" name="service" placeholder="Сервисная компания"/>
+                        <div class="input-group mb-4">
+                            <button class="input-group-text bg-transparent" type="button"><i class="fa fa-search"></i></button>
+                            <input class="form-control" type="search" name="vehicle" placeholder="Зав № машины"/>
+                        </div>
+                        <div class="input-group mb-4">
+                            <button class="input-group-text bg-transparent" type="button"><i class="fa fa-search"></i></button>
+                            <input class="form-control" type="search" name="service" placeholder="Сервисная компания"/>
+                        </div>
                     </div>
                     <button type="submit" class="btn btn-primary">Search</button>
                 </form>
