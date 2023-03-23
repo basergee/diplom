@@ -8,7 +8,7 @@
                 <p class="fs-3">{{ user.first_name }}</p>
             </div>
         </div>
-        <div class="row">
+        <div class="row pb-4">
             <div class="col text-center">
                 <p class="fs-3">Информация о рекламациях</p>
             </div>
@@ -29,8 +29,8 @@
         </div>
 
         <!-- Форма для фильтрации данных -->
-        <div class="row">
-            <div class="col">
+        <div class="row justify-content-center p-3">
+            <div class="col-xs-6 col-md-6 border bg-white border rounded-5 my-4">
                 <form method="GET" action="." class="py-5">
                     <div class="form-row">
                         <div class="input-group mb-4">
@@ -46,19 +46,24 @@
                             <input class="form-control" type="search" name="service" placeholder="Сервисная компания"/>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Search</button>
+                    <button type="submit" class="btn btn-primary">Найти</button>
                 </form>
             </div>
         </div>
 
         <!-- Кнопка добавления нового объекта -->
         {% if perms.api.add_reclamation %}
-        <a href="{% url 'reclamation_add' %}" class="btn btn-primary">Добавить</a>
+        <div class="row pb-4">
+            <div class="col-auto">
+                <span class="fs-4">Нажмите, чтобы создать объект: </span>
+                <a href="{% url 'reclamation_add' %}" class="btn btn-primary">Добавить</a>
+            </div>
+        </div>
         {% endif %}
 
         <!-- Таблица с данными -->
-        <div class="row">
-            <div class="table-responsive">
+        <div class="row pb-5">
+            <div class="table-responsive border-top border-dark border-5">
                 <table class="table table-striped">
                     <thead>
                         <tr>

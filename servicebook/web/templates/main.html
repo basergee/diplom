@@ -19,8 +19,8 @@
           crossorigin="anonymous">
 
     {% load static %}
-
-        <link rel="stylesheet" href="{% static 'web/css/bootstrap-breakpoint.css' %}">
+        <!-- Отключим стиль, показывающий размер экрана -->
+        <!-- <link rel="stylesheet" href="{% static 'web/css/bootstrap-breakpoint.css' %}"> -->
         <link rel="stylesheet" href="{% static 'web/css/stylesheet.css' %}">
 
     <title>
@@ -30,21 +30,23 @@
 </head>
 
 <body>
-    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
-        <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
-            <img class="col-4" src="{% static 'web/images/Logotype accent RGB 1.jpg' %}">
-        </a>
+    <header class="container py-3 mb-4 border-bottom border-dark border-5">
+        <div class="row justify-content-between">
+            <a href="/" class="border col col-sm-2 mb-2 mb-md-0 text-dark text-decoration-none">
+                <img class="img-fluid img-thumbnail d-block" src="{% static 'web/images/Logotype accent RGB 1.jpg' %}">
+            </a>
 
-        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-            <li>+7-8352-20-12-09, telegram</li>
-        </ul>
+            <div class="border col mb-2 mb-md-0 text-center fs-5">
+                <span>+7-8352-20-12-09, telegram</span>
+            </div>
 
-        <div class="col-md-3 text-end">
-            {% if user.is_authenticated %}
-                <a href="{% url 'logout' %}" class="btn btn-outline-primary me-2">Выйти</a>
-            {% else %}
-                <a href="{% url 'login' %}" class="btn btn-outline-primary me-2">Вход</a>
-            {% endif %}
+            <div class="border col text-end">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'logout' %}" class="btn btn-outline-primary me-2">Выйти</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-outline-primary me-2">Вход</a>
+                {% endif %}
+            </div>
         </div>
     </header>
 
@@ -62,11 +64,15 @@
         {% endblock content %}
     </main>
 
-    <footer class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-top">
-        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-            <li>+7-8352-20-12-09, telegram</li>
-            <li>Мой Силант 2023</li>
-        </ul>
+    <footer class="container py-3 mb-4 border-top border-dark border-5">
+        <div class="d-flex row mb-2 justify-content-between mb-md-0 text-center fs-5">
+            <div class="col-sm-4 col-md-auto">
+                <span>+7-8352-20-12-09, telegram</span>
+            </div>
+            <div class="col-sm-4 col-md-auto">
+                <span>Мой Силант 2023</span>
+            </div>
+        </div>
     </footer>
 
     <!-- Bootstrap Bundle with Popper -->

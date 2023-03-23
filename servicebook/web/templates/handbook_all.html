@@ -8,7 +8,7 @@
                 <p class="fs-3">{{ user.first_name }}</p>
             </div>
         </div>
-        <div class="row">
+        <div class="row pb-4">
             <div class="col text-center">
                 <p class="fs-3">Информация о справочниках</p>
             </div>
@@ -30,12 +30,17 @@
 
         <!-- Кнопка добавления нового объекта -->
         {% if perms.api.add_handbook %}
-        <a href="{% url 'handbook_add' %}" class="btn btn-primary">Добавить</a>
+        <div class="row p-4">
+            <div class="col-auto">
+                <span class="fs-4">Нажмите, чтобы создать объект: </span>
+                <a href="{% url 'handbook_add' %}" class="btn btn-primary">Добавить</a>
+            </div>
+        </div>
         {% endif %}
 
         <!-- Таблица с данными -->
-        <div class="row">
-            <div class="table-responsive">
+        <div class="row pb-5">
+            <div class="table-responsive border-top border-dark border-5">
                 <table class="table table-striped">
                     <thead>
                         <tr>

@@ -19,7 +19,7 @@
                 </div>
             </form>
 
-            <div class="row">
+            <div class="row pb-4">
                 <div class="col text-center">
                     <p class="fs-3">Информация о комплектации и технических характеристиках Вашей техники</p>
                 </div>
@@ -29,38 +29,42 @@
         <!-- Таблица с результатами поиска -->
         <div class="container">
             {% if search_results|length > 0 %}
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th scope="col">Зав. № машины</th>
-                            <th scope="col">Модель техники</th>
-                            <th scope="col">Модель двигателя</th>
-                            <th scope="col">Зав. № двигателя</th>
-                            <th scope="col">Модель трансмиссии</th>
-                            <th scope="col">Зав. № трансмиссии</th>
-                            <th scope="col">Модель ведущего моста</th>
-                            <th scope="col">Зав. № ведущего моста</th>
-                            <th scope="col">Модель управляемого моста</th>
-                            <th scope="col">Зав. № управляемого моста</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for v in search_results %}
+            <div class="row pb-5">
+                <div class="table-responsive border-top border-dark border-5">
+                    <table class="table table-striped">
+                        <thead>
                             <tr>
-                                <td>{{v.vehicle_id}}</td>
-                                <td><a href="{% url 'handbook_detail' v.vehicle_model.pk %}"/>{{v.vehicle_model}}</td>
-                                <td><a href="{% url 'handbook_detail' v.engine_model.pk %}"/>{{v.engine_model}}</td>
-                                <td>{{v.engine_id}}</td>
-                                <td><a href="{% url 'handbook_detail' v.transmission_model.pk %}"/>{{v.transmission_model}}</td>
-                                <td>{{v.transmission_id}}</td>
-                                <td><a href="{% url 'handbook_detail' v.main_axle_model.pk %}"/>{{v.main_axle_model}}</td>
-                                <td>{{v.main_axle_id}}</td>
-                                <td><a href="{% url 'handbook_detail' v.driven_axle_model.pk %}"/>{{v.driven_axle_model}}</td>
-                                <td>{{v.driven_axle_id}}</td>
+                                <th scope="col">Зав. № машины</th>
+                                <th scope="col">Модель техники</th>
+                                <th scope="col">Модель двигателя</th>
+                                <th scope="col">Зав. № двигателя</th>
+                                <th scope="col">Модель трансмиссии</th>
+                                <th scope="col">Зав. № трансмиссии</th>
+                                <th scope="col">Модель ведущего моста</th>
+                                <th scope="col">Зав. № ведущего моста</th>
+                                <th scope="col">Модель управляемого моста</th>
+                                <th scope="col">Зав. № управляемого моста</th>
                             </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {% for v in search_results %}
+                                <tr>
+                                    <td>{{v.vehicle_id}}</td>
+                                    <td><a href="{% url 'handbook_detail' v.vehicle_model.pk %}"/>{{v.vehicle_model}}</td>
+                                    <td><a href="{% url 'handbook_detail' v.engine_model.pk %}"/>{{v.engine_model}}</td>
+                                    <td>{{v.engine_id}}</td>
+                                    <td><a href="{% url 'handbook_detail' v.transmission_model.pk %}"/>{{v.transmission_model}}</td>
+                                    <td>{{v.transmission_id}}</td>
+                                    <td><a href="{% url 'handbook_detail' v.main_axle_model.pk %}"/>{{v.main_axle_model}}</td>
+                                    <td>{{v.main_axle_id}}</td>
+                                    <td><a href="{% url 'handbook_detail' v.driven_axle_model.pk %}"/>{{v.driven_axle_model}}</td>
+                                    <td>{{v.driven_axle_id}}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
             {% else %}
                 <div class="row">
                     <div class="col text-center">
