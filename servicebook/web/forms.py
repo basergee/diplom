@@ -91,9 +91,13 @@ class VehicleCreateForm(forms.ModelForm):
         self.fields['driven_axle_model'].queryset = Handbook.objects.filter(
             handbook_name='DA')
         self.fields['client'] = UserFirstNameField(
-            queryset=User.objects.filter(groups__name__in=['Client']))
+            queryset=User.objects.filter(groups__name__in=['Client']),
+            label='Клиент'
+        )
         self.fields['service_company'] = UserFirstNameField(
-            queryset=User.objects.filter(groups__name__in=['ServiceCompany']))
+            queryset=User.objects.filter(groups__name__in=['ServiceCompany']),
+            label='Сервисная компания'
+        )
 
 
 class MaintenanceCreateForm(forms.ModelForm):
@@ -120,7 +124,9 @@ class MaintenanceCreateForm(forms.ModelForm):
         self.fields['maintenance_type'].queryset = Handbook.objects.filter(
             handbook_name='MT')
         self.fields['service_company'] = UserFirstNameField(
-            queryset=User.objects.filter(groups__name__in=['ServiceCompany']))
+            queryset=User.objects.filter(groups__name__in=['ServiceCompany']),
+            label='Сервисная компания'
+        )
 
 
 class ReclamationCreateForm(forms.ModelForm):
@@ -151,4 +157,6 @@ class ReclamationCreateForm(forms.ModelForm):
         self.fields['repair_description'].queryset = Handbook.objects.filter(
             handbook_name='RD')
         self.fields['service_company'] = UserFirstNameField(
-            queryset=User.objects.filter(groups__name__in=['ServiceCompany']))
+            queryset=User.objects.filter(groups__name__in=['ServiceCompany']),
+            label='Сервисная компания'
+        )
