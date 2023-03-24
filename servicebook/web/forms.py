@@ -44,6 +44,13 @@ class UserLoginForm(forms.Form):
         return super(UserLoginForm, self).clean(*args, **kwargs)
 
 
+# Класс нужен для того, чтобы в формах выводить для клиентов и сервисных
+# компаний поле first_name
+class UserFirstNameField(forms.ModelChoiceField):
+    def label_from_instance(self, user):
+        return user.first_name
+
+
 class VehicleCreateForm(forms.ModelForm):
     class Meta:
         model = Vehicle
@@ -83,10 +90,10 @@ class VehicleCreateForm(forms.ModelForm):
             handbook_name='MA')
         self.fields['driven_axle_model'].queryset = Handbook.objects.filter(
             handbook_name='DA')
-        self.fields['client'].queryset = User.objects.filter(
-            groups__name__in=['Client'])
-        self.fields['service_company'].queryset = User.objects.filter(
-            groups__name__in=['ServiceCompany'])
+        self.fields['client'] = UserFirstNameField(
+            queryset=User.objects.filter(groups__name__in=['Client']))
+        self.fields['service_company'] = UserFirstNameField(
+            queryset=User.objects.filter(groups__name__in=['ServiceCompany']))
 
 
 class MaintenanceCreateForm(forms.ModelForm):
@@ -112,8 +119,8 @@ class MaintenanceCreateForm(forms.ModelForm):
         self.fields['vehicle'].queryset = Vehicle.objects.filter(client=user)
         self.fields['maintenance_type'].queryset = Handbook.objects.filter(
             handbook_name='MT')
-        self.fields['service_company'].queryset = User.objects.filter(
-            groups__name__in=['ServiceCompany'])
+        self.fields['service_company'] = UserFirstNameField(
+            queryset=User.objects.filter(groups__name__in=['ServiceCompany']))
 
 
 class ReclamationCreateForm(forms.ModelForm):
@@ -143,5 +150,5 @@ class ReclamationCreateForm(forms.ModelForm):
             handbook_name='FN')
         self.fields['repair_description'].queryset = Handbook.objects.filter(
             handbook_name='RD')
-        self.fields['service_company'].queryset = User.objects.filter(
-            groups__name__in=['ServiceCompany'])
+        self.fields['service_company'] = UserFirstNameField(
+            queryset=User.objects.filter(groups__name__in=['ServiceCompany']))
