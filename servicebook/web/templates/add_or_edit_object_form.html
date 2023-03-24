@@ -2,11 +2,11 @@
 
 {% block content %}
 <div class="container">
-    <form method="post">{% csrf_token %}
+    <form method="post" class="py-3">{% csrf_token %}
         <table>
             {{form}}
         </table>
-        <input type="submit" value="Сохранить">
+        <input class="btn btn-primary mt-4 mb-2" type="submit" value="Сохранить">
     </form>
 </div>
 {% endblock content %}
